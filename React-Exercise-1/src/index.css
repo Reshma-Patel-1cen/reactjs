@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+.clock-wrapper {
+  padding: 20px;
+}
+.clock-bg {
+  background-color: black;
+  height: 250px;
+  width: 400px;
+  color: #00ff25eb;
+}
+.hour {
+  font-size: 40px;
+}
+.time {
+  font-size: 80px;
+  height: 65px;
+  line-height: 60px;
+  font-weight: bold;
+  text-shadow: #00ff25eb 1px 0 10px;
+}
+.fs13 {
+  font-size: 13px;
+}
