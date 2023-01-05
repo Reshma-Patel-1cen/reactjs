@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+.App {
+  padding: 20px;
+}
+/* .content-wrapper {
+  padding: 40px;
+} */
+.header {
+  margin-bottom: 20px;
+}
+.filter {
+  margin-bottom: 20px;
+}
+.user-form .row {
+  margin-bottom: 20px;
+}
+.user-form label,
+.login-form label {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.user-form .btn {
+  margin-bottom: 20px;
+}
+.error {
+  color: red;
+  margin-top: 20px;
+}
+.grid-icon .bi {
+  margin-left: 10px;
+}
+.module-wrapper {
+  padding: 10px;
+  margin-bottom: 20px;
+}
+.removeBtn {
+  margin-top: 35px;
+}
+.login-form .btn {
+  margin-top: 20px;
+  width: 150px;
+}
+.login-wrapper {
+  padding: 40px;
+}
+.shadow {
+  margin-top: -100px;
+  background: hsla(0, 0%, 100%, 0.8);
+  backdrop-filter: blur(30px);
+  padding: 100px !important;
+}
+.tag-wrapper {
+  border: 1px solid #808080;
+  margin-right: 5px;
+  padding: 2px;
+}
+.ReactTags__selected {
+  margin-top: 10px;
+}
+.ReactTags__remove {
+  background: unset;
+  border: unset;
+  color: #808080;
+}
+.userData{
+  color: #fff;
+}
