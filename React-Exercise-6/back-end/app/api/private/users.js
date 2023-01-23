@@ -21,9 +21,9 @@ export default app => {
       password: sha1(req.body.password),
       user_email: req.body.email,
       status: parseInt(req.body.status),
+      role:2,
       user_role: JSON.stringify(req.body.roles)
     };
-    console.log("userData",userData)
     const result = await createRecord(userData, 'users');
     if (result.error) {
       return res.status(400).send(result);
@@ -38,7 +38,6 @@ export default app => {
     }
     return res.send({ success: true, data: result });
   }).put(async (req, res) => {
-    console.log("req", req.body);
     const userData = {
       user_name: req.body.userName,
       first_name: req.body.firstName,
@@ -53,7 +52,6 @@ export default app => {
     }
     return res.send({ success: true, data: result });
   }).delete(async (req, res) => {
-    console.log("idd",req.params.id)
     const result = await deleteUSer("users","user_id",req.params.id);
     if (result.error) {
       return res.status(400).send(result);

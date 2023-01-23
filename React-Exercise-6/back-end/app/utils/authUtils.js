@@ -7,7 +7,6 @@ const generateToken = (user) => {
     userId: user.name,
     time: Date(),
   };
-  console.log("user",data)
 
   return jwt.sign(data, process.env.JWT_SECRET_KEY, {
     expiresIn: 60 * 60 * 24 // expires in 24 hours

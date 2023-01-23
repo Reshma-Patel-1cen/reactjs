@@ -20,17 +20,35 @@ export default app => {
   });
 
   app.post('/role', async (req, res) => {
-    const userData = {
-      role_name: req.body.roleName,
-      description: req.body.description,
-      module_data: JSON.stringify(req.body.module),
-      status: req.body.status
-    };
-    const result = await createRecord(userData, 'roles');
-    if (result.error) {
+
+    const requestData = JSON.stringify(req.body)
+    const modulePromises = JSON.parse(requestData).module.map(async (item) => {
+      const moduleData = {
+        module_name: item.moduleName,
+        privileges: JSON.stringify(item.privileges)
+      }
+      const createdModule = await createRecord(moduleData, 'modules');
+      return createdModule;
+    });
+
+    const response = await Promise.all(modulePromises);
+    const moduleArry = response.map(res => res.insertId)
+
+    if (moduleArry.length) {
+      const userData = {
+        role_name: req.body.roleName,
+        description: req.body.description,
+        module_data: moduleArry.join(','),
+        status: req.body.status
+      };
+      const result = await createRecord(userData, 'roles');
+      if (result.error) {
+        return res.status(400).send(result);
+      }
+      return res.send({ success: true, data: response.insertId });
+    } else {
       return res.status(400).send(result);
     }
-    return res.send({ success: true, data: result });
   });
 
   app.route("/role/:id").get(async (req, res) => {

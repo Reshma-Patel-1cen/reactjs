@@ -7,6 +7,7 @@ const generateInsertQuery = (data, tableName) => {
       ) VALUES (
         ${Object.values(data).map(x => `'${x || ''}'`).join(', ')}
         );`;
+        console.log(query)
 
     connection.query(query, function (err, res) {
       err ? resolve({ error: true, message: err.sqlMessage || err }) : resolve(res);
@@ -29,9 +30,9 @@ const generateUpdateQuery = (data, tableName, clauseKey, clauseValue) => {
   })
 }
 
-const generateSelectQuery = (tableName, clauseKey="", clauseValue="") => {
+const generateSelectQuery = (tableName, clauseKey = "", clauseValue = "") => {
   return new Promise(resolve => {
-    const where = clauseKey !=="" ? ` WHERE ${clauseKey} = ${clauseValue}` : "";
+    const where = clauseKey !== "" ? ` WHERE ${clauseKey} = ${clauseValue}` : "";
     const query = `SELECT * from ${tableName} ${where}`;
     connection.query(query, function (err, res) {
       err ? resolve({ error: true, message: err.sqlMessage || err }) : resolve(res);
@@ -57,10 +58,21 @@ const checkUserpwd = (user, pwd, tableName) => {
   })
 }
 
+const getPatternData = (pattern) => {
+  const string = pattern.map((a) => `product LIKE "%${a.replace(/[^a-zA-Z ]/g, "")}%"`).join(' OR ');
+  return new Promise(resolve => {
+    const query = "SELECT * FROM products WHERE " + string;
+    connection.query(query, function (err, res) {
+      err ? resolve({ error: true, message: err.sqlMessage || err }) : resolve(res);
+    })
+  })
+}
+
 export {
   generateInsertQuery,
   generateUpdateQuery,
   generateSelectQuery,
   generateDeleteQuery,
-  checkUserpwd
+  checkUserpwd,
+  getPatternData
 }

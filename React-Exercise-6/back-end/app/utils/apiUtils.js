@@ -1,4 +1,4 @@
-import { generateInsertQuery, generateUpdateQuery, generateDeleteQuery, generateSelectQuery, checkUserpwd } from "../../config/db/httpInterceptor";
+import { generateInsertQuery, generateUpdateQuery, generateDeleteQuery, generateSelectQuery, checkUserpwd, getPatternData } from "../../config/db/httpInterceptor";
 
 const createRecord = async (data, tableName) => {
   const result = await generateInsertQuery(data, tableName);
@@ -25,6 +25,10 @@ const deleteUSer = async (tableName, clauseKey, clauseValue) => {
   return result;
 }
 
+const getPatternMatchData = async (pattern) => {
+  const result = await getPatternData(pattern);
+  return result;
+}
 const verifyUser = async (user, pwd) => {
   const result = await checkUserpwd(user, pwd, 'users');
   return result;
@@ -48,5 +52,6 @@ export {
   deleteUSer,
   verifyUser,
   resetPwd,
-  updateToken
+  updateToken,
+  getPatternMatchData
 }
