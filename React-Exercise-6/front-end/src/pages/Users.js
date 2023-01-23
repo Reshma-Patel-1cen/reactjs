@@ -39,25 +39,28 @@ const User = () => {
     }
   }
 
-  const getUsers = () => {
-    fetch('http://localhost:8000/api/v1.1/users')
+  const getUsers = useCallback(async() => {
+   return await fetch('http://localhost:8000/api/v1.1/users')
       .then((response) => response.json())
-      .then((data) => {
-        const result = [];
-        data.data.map(x => {
-          result.push({ "id": x.user_id, "firstname": x.first_name, "lastname": x.last_name, "user_email": x.user_email, "user_name": x.user_name, "user_role": JSON.parse(x.user_role).map((element) => element.label).join(", "), "status": x.status === 1 ? "Active" : "Deactive" })
-          return result
-        })
-        setRowData(result);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }
+      
+  },[])
 
   useEffect(() => {
-    getUsers()
-  }, []);
+    getUsers().then((res) => {
+      const result = [];
+      res.data.map(x => {
+        if(x.user_id!==1){
+        result.push({ "id": x.user_id, "firstname": x.first_name, "lastname": x.last_name, "user_email": x.user_email, "user_name": x.user_name, "user_role": JSON.parse(x.user_role).map((element) => element.label).join(", "), "status": x.status === 1 ? "Active" : "Deactive" })
+        }
+        return result
+      })
+
+      setRowData(result);
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+  }, [getUsers]);
 
   const onFilterTextBoxChanged = useCallback(() => {
     gridRef.current.api.setQuickFilter(

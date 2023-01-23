@@ -10,7 +10,7 @@ const Module = ({ moduleIndex, register, control, errors, removeModule }) => {
 
   const addPrivileges = (e) => {
     e.preventDefault()
-    append({ pattern: "", permissions: [] })
+    append({ pattern: ['red*','her*'], permissions: [] })
 
   }
   return (

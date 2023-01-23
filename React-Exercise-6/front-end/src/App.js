@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom'
-import Content from './layout/Content';
-import SideBar from "./layout/SideBar";
-import Header from "./layout/Header";
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import PublicRoutes from './utils/PublicRoutes';
+import PrivateRoutes from './utils/PrivateRoutes';
+import Login from './pages/Login';
+import Dashboard from './layout/Dashboard';
 
 const App = () => {
-  const [showNav, setShowNav] = useState(true)
-  
   return (
     <Router>
-      <div className={`body-area${showNav ? ' body-pd' : ''}`}>
-        <Header showNav={showNav} setShowNav={setShowNav} />
-        <SideBar showNav={showNav} />
-        <Content />
-      </div>
+      <Routes>
+        <Route element={<PublicRoutes />}>
+          <Route path="/login" element={<Login />} />
+        </Route>
+        <Route element={<PrivateRoutes />}>
+          <Route path="*" element={<Dashboard />} />
+        </Route>
+      </Routes>
     </Router>
   )
 }

@@ -10,32 +10,11 @@ const Previleges = ({ moduleIndex, privilegesIndex, register, control, errors, r
     comma: 188,
     enter: 13,
   };
-  const [tags, setTags] = useState([
-    { id: 'red', text: 'red*' },
-    { id: 'hur', text: 'hur*' },
 
-  ]);
-  const handleDelete = (i) => {
-    setTags(tags.filter((tag, index) => index !== i));
-  };
-
-  const handleAddition = (tag) => {
-    setTags([...tags, tag]);
-  };
-
-  const handleDrag = (tag, currPos, newPos) => {
-    const newTags = tags.slice();
-
-    newTags.splice(currPos, 1);
-    newTags.splice(newPos, 0, tag);
-
-    // re-render
-    setTags(newTags);
-  };
-
-  const validateTags = (index) => {
-    console.log('The tag at index ' + index + ' was clicked');
-  };
+  const validateTag = tagText => {
+    const regex = new RegExp(/^[A-Za-z*_-]*$/)
+    return regex.test(tagText);
+  }
 
   const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
@@ -61,7 +40,7 @@ const Previleges = ({ moduleIndex, privilegesIndex, register, control, errors, r
     getPermissionList();
 
   }, [getPermissionList]);
-  console.log("errors", errors)
+  
   return (
     <div>
 
@@ -70,39 +49,38 @@ const Previleges = ({ moduleIndex, privilegesIndex, register, control, errors, r
           <label>Pattern(s)</label>
           <Controller
             control={control}
-            name={`module.${moduleIndex}.privileges.${privilegesIndex}.permissions`}
+            name={`module.${moduleIndex}.privileges.${privilegesIndex}.pattern`}
             rules={{
-              required: {
-                message: "Item type is required.",
-              },
+              validate: (val) => {
+                if (!val.length) return "Please enter pattern.";
+                const isValid = val.every(x => validateTag(x))
+                if (!isValid) {
+                  return "Only *,-,_ allowed";
+                }
+              }
             }}
             render={({
               field: { onChange, onBlur, defaultValue, value, name, ref },
             }) => (
               <ReactTags
-                tags={tags}
-                // suggestions={suggestions}
-                {...register(`module.${moduleIndex}.privileges.${privilegesIndex}.patterns`, { required: true, pattern: /^[a-zA-Z*_-]+$/g })}
+                tags={value.map(x => ({ id: x, text: x, className: validateTag(x) ? '' : 'text-danger' }))}
                 classNames={{
-                  tagInputField: 'form-control'
+                  tagInputField: 'form-control',
+                  placeHolder:"enter fruits"
                 }}
-                handleInputChange = {validateTags}
                 delimiters={delimiters}
-                handleDelete={handleDelete}
-                handleAddition={handleAddition}
-                handleDrag={handleDrag}
-                handleTagClick={validateTags}
+                placeholder = "Enter pattern"
+                handleDelete={index => onChange(value.filter((t, i) => i !== index))}
+                handleAddition={tag => onChange([...value, tag.text])}
                 inputFieldPosition="top"
                 autocomplete
                 editable
+                innerRef={ref}
               />
             )}
           />
-          {/* <input placeholder="Enter Pattern" className="form-control" {...register(`module.${moduleIndex}.privileges.${privilegesIndex}.patterns`, { required: true, pattern: /^[a-zA-Z*_-]+$/g })} /> */}
-          {errors.module?.[moduleIndex]?.privileges?.[privilegesIndex]?.patterns?.type === "required" && <span className='error'>Please enter pattern</span>}
-          {errors.module?.[moduleIndex]?.privileges?.[privilegesIndex]?.patterns?.type === "pattern" && (
-            <span className='error'>Only *,-,_ allowed</span>
-          )}
+          {errors.module?.[moduleIndex]?.privileges?.[privilegesIndex]?.pattern && <span className='error'>{errors.module?.[moduleIndex]?.privileges?.[privilegesIndex]?.pattern.message}</span>}
+
         </div>
         <div className="col-md-5">
           <label>Permission(s)</label>

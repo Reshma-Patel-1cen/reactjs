@@ -13,11 +13,14 @@ const AddEditRole = () => {
     setValue,
     handleSubmit,
     formState: { errors },
+    // watch
   } = useForm({
     defaultValues: {
       module: []
     }
   });
+
+  // console.log('............... formState ', watch('module'))
 
   const { fields, append, remove } = useFieldArray({
     control,

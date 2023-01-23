@@ -76,4 +76,8 @@ code {
 }
 .userData{
   color: #fff;
+  margin: 60px;
+}
+.bi{
+  margin-right: 4px;
 }
