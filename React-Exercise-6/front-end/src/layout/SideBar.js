@@ -19,27 +19,27 @@ const SideBar = ({ showNav }) => {
 
   useEffect(() => {
 
-    if(getUserData.user_role){
-    Promise.all(getUserData.user_role.map(async (item, index) => {
-      return await getRoleData(item.value)
-    })).then(res => {
-      const moduleIdArray = [];
-      flatten(res.map(x => x.data)).map(x => {
-        const moduleIds = x.module_data.split(',');
-       return  moduleIds.map(x => moduleIdArray.push(x))
-      })
-      Promise.all(moduleIdArray.map(async (item) => {
-        return await getModuleData(item)
+    if (getUserData.user_role) {
+      Promise.all(getUserData.user_role.map(async (item, index) => {
+        return await getRoleData(item.value)
       })).then(res => {
-        const moduleArray = [];
+        const moduleIdArray = [];
         flatten(res.map(x => x.data)).map(x => {
-          return moduleArray.push({ "module_id": x.module_id, "module_name": x.module_name })
+          const moduleIds = x.module_data.split(',');
+          return moduleIds.map(x => moduleIdArray.push(x))
         })
-        setSidemenuItems(moduleArray)
+        Promise.all(moduleIdArray.map(async (item) => {
+          return await getModuleData(item)
+        })).then(res => {
+          const moduleArray = [];
+          flatten(res.map(x => x.data)).map(x => {
+            return moduleArray.push({ "module_id": x.module_id, "module_name": x.module_name })
+          })
+          setSidemenuItems(moduleArray)
+        })
       })
-    })
-  }
-  }, [getModuleData,getRoleData,getUserData])
+    }
+  }, [])
 
   return <div className={`l-navbar${showNav ? ' show' : ''}`} id="nav-bar">
     <nav className="nav">

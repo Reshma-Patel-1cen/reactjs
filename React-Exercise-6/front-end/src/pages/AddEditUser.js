@@ -63,11 +63,13 @@ const AddEditUser = () => {
       .then((response) => response.json())
       .then((data) => {
         const editData = data.data[0]
-        setValue("userName", editData['user_name'])
-        setValue("firstName", editData['first_name'])
-        setValue("lastName", editData['last_name'])
-        setValue("email", editData['user_email'])
-        setValue("roles", JSON.parse(editData['user_role']))
+        console.log("editData",editData)
+        setValue("userName", editData.user_name)
+        setValue("firstName", editData.first_name)
+        setValue("lastName", editData.last_name)
+        setValue("email", editData.user_email)
+        setValue("roles", JSON.parse(editData.user_role))
+        setValue("status",editData.status.toString())
       })
       .catch((err) => {
         console.log(err.message);

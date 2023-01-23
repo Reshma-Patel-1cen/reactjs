@@ -55,7 +55,7 @@ const UserModule = () => {
 
   const getData = useCallback(async (data) => {
     // console.log("data1", data)
-    return await fetch('http://localhost:8000/api/v1.1/', {
+    return await fetch('http://localhost:8000/api/v1.1/privileges', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,6 +80,7 @@ const UserModule = () => {
   useEffect(() => {
 
     getModuleData(id).then(res => {
+     
       const privileges = JSON.parse(res.data[0].privileges)
       Promise.all(
         privileges.map(async (item) => {
