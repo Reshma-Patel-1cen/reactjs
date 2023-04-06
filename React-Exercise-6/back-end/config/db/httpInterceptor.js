@@ -8,7 +8,6 @@ const generateInsertQuery = (data, tableName) => {
         ${Object.values(data).map(x => `'${x || ''}'`).join(', ')}
         );`;
         console.log(query)
-
     connection.query(query, function (err, res) {
       err ? resolve({ error: true, message: err.sqlMessage || err }) : resolve(res);
     })
@@ -23,17 +22,25 @@ const generateUpdateQuery = (data, tableName, clauseKey, clauseValue) => {
     }
     updateString = updateString.slice(0, -1);
     const query = `UPDATE ${tableName} SET ${updateString} WHERE ${clauseKey} = "${clauseValue}";`;
-    console.log(query)
     connection.query(query, function (err, res) {
       err ? resolve({ error: true, message: err.sqlMessage || err }) : resolve(res);
     })
   })
 }
 
-const generateSelectQuery = (tableName, clauseKey = "", clauseValue = "") => {
+const generateSelectQuery = (tableName, clauseKey = "", clauseValue = "",clauseKey1 = "", clauseValue1 = "") => {
   return new Promise(resolve => {
     const where = clauseKey !== "" ? ` WHERE ${clauseKey} = ${clauseValue}` : "";
-    const query = `SELECT * from ${tableName} ${where}`;
+    const con = clauseKey1 !== "" ? ` AND ${clauseKey1} = ${clauseValue1}` : "";
+    const query = `SELECT * from ${tableName} ${where} ${con}`;
+    connection.query(query, function (err, res) {
+      err ? resolve({ error: true, message: err.sqlMessage || err }) : resolve(res);
+    })
+  })
+}
+const generateCountQuery = (tableName, clauseKey = "", clauseValue = "") => {
+  return new Promise(resolve => {
+    const query =`SELECT COUNT(*) AS total, COUNT(CASE WHEN ${clauseKey} = ${clauseValue} THEN 1 END) AS count FROM  ${tableName}`
     connection.query(query, function (err, res) {
       err ? resolve({ error: true, message: err.sqlMessage || err }) : resolve(res);
     })
@@ -43,6 +50,7 @@ const generateSelectQuery = (tableName, clauseKey = "", clauseValue = "") => {
 const generateDeleteQuery = (tableName, clauseKey, clauseValue) => {
   return new Promise(resolve => {
     const query = `DELETE from ${tableName} WHERE ${clauseKey} = ${clauseValue};`;
+    console.log(query)
     connection.query(query, function (err, res) {
       err ? resolve({ error: true, message: err.sqlMessage || err }) : resolve(res);
     })
@@ -74,5 +82,6 @@ export {
   generateSelectQuery,
   generateDeleteQuery,
   checkUserpwd,
-  getPatternData
+  getPatternData,
+  generateCountQuery
 }
